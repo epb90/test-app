@@ -1,0 +1,38 @@
+name: Test and Deploy
+
+on: push
+jobs:
+  run-test:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.11.4"
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      - name: Run tests
+        run: pytest
+
+  deploy:
+    needs: run-test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: SSH and deploy
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: 188.166.109.153
+          username: "root"
+          password: "1234Test"
+          port: 22
+          script: |
+            cd /home/test-app
+            echo 'Entering /home/test-app directory'
+            git pull
+            echo 'Repository has been pulled'
+            pip install gunicorn
+            echo 'Installed Gunicorn'
+            gunicorn -b 0.0.0.0:8000 -w 4 app:app &
+            echo 'Started Gunicorn server'
