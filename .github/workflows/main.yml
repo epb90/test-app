@@ -28,7 +28,7 @@ jobs:
         with:
           host: 164.92.253.109
           username: "root"
-          password: "1234Test"
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
             cd /home/test-app
