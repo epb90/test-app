@@ -23,7 +23,7 @@ jobs:
       - name: SSH and deploy
         uses: appleboy/ssh-action@v0.1.4
         with:
-          host: 188.166.109.153
+          host: 164.92.253.109
           username: "root"
           password: "1234Test"
           port: 22
