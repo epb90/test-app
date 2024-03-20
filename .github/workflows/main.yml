@@ -26,15 +26,15 @@ jobs:
       - name: SSH and deploy
         uses: appleboy/ssh-action@v0.1.4
         with:
-          //ssh
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
+          host: ${{ secrets.SECRET_IP}}
+          username: ${{ secrets.SECRET_USERNAME }}
+          password: ${{ secrets.SECRET_PASSWORD}}
+          port: ${{ secrets.SECRET_PORT }}
+          
           script: |
             cd /home/test-app
             echo 'Entering /home/test-app directory'
             git pull
             echo 'Repository has been pulled'
-            pip install gunicorn
-            echo 'Installed Gunicorn'
-            gunicorn -b 0.0.0.0:8000 -w 4 app:app &
-            echo 'Started Gunicorn server'
+            systemctl restart test-app.service
+            systemctl status test-app.service
